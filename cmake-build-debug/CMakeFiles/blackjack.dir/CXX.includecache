@@ -1,0 +1,36 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/davislee/CLionProjects/blackjack/Card.cpp
+Card.h
+/Users/davislee/CLionProjects/blackjack/Card.h
+
+/Users/davislee/CLionProjects/blackjack/Card.h
+string
+-
+iostream
+-
+
+/Users/davislee/CLionProjects/blackjack/Deck.cpp
+Deck.h
+/Users/davislee/CLionProjects/blackjack/Deck.h
+
+/Users/davislee/CLionProjects/blackjack/Deck.h
+Card.h
+/Users/davislee/CLionProjects/blackjack/Card.h
+
+/Users/davislee/CLionProjects/blackjack/GameTime.cpp
+Deck.h
+/Users/davislee/CLionProjects/blackjack/Deck.h
+iostream
+-
+vector
+-
+stdlib.h
+-
+
