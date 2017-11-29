@@ -6,13 +6,32 @@
 #include <vector>
 #include <stdlib.h>
 
+/*
+ * int codes:
+ * 0 = house win
+ * 1 = push
+ * 2 = player win
+ * 3 = player blackjack
+ * 4 = player wins double (both split wins or successful double down)
+ * 5 = player loses double (both split loses or unsuccessful double down)
+ */
 int getVal(Card input);
+
 int playOneRound(Deck &playingDeck);
+
 int testForBlackjack(int houseSum, int playerSum);
+
 int runSplitRound(int houseSum, string houseString, int playerSum, string playerString,
                   Deck &playingDeck);
 
-int main(void){
+int playOneHand(string playerString, int playerSum, Deck &playingDeck);
+
+int playHouseHand(string houseString, int houseSum, Deck &playingDeck);
+
+int findWinner(int playerSum, int houseSum);
+
+
+int main(void) {
     Deck playingDeck;
     playOneRound(playingDeck);
 }
@@ -27,6 +46,10 @@ int playOneRound(Deck &playingDeck) {
     Card curCard;
 
     curCard = playingDeck.deal();
+    playerSum += getVal(curCard);
+    playerString += curCard.toString() + " ";
+
+    curCard = playingDeck.deal();
     houseSum += getVal(curCard);
     houseString += curCard.toString() + " ";
 
@@ -39,18 +62,13 @@ int playOneRound(Deck &playingDeck) {
     houseSum += getVal(curCard);
     houseString += curCard.toString() + " ";
 
-    curCard = playingDeck.deal();
-    playerSum += getVal(curCard);
-    playerString += curCard.toString() + " ";
-
-
-
     cout << "House Hand: " << houseString.substr(0, 3) << endl;
     cout << "Player Hand: " << playerString << endl << endl;
     int blackjackTest = testForBlackjack(houseSum, playerSum);
     if (blackjackTest != -1) {
         return blackjackTest;
     }
+
     if (curCard.getValue() == splitTest) {
         cout << "Split Cards?" << endl;
         cin >> splitTest;
@@ -59,107 +77,66 @@ int playOneRound(Deck &playingDeck) {
                                  playingDeck);
         }
     }
-    cout << "Hit or Stay? ";
-    string command = "";
-    cin >> command;
-    bool aceUsed = false;
-    while (command == "hit" || command == "Hit") {
-        curCard = playingDeck.deal();
-        playerSum += getVal(curCard);
-        playerString += curCard.toString() + " ";
-        cout << "Next Card: " << curCard.toString() << endl;
-        if (playerSum > 21) {
-            if (playerString.find("A") != string::npos && !aceUsed) {
-                playerSum -= 10;
-                aceUsed = true;
-            } else {
-                cout << "Player Bust! House wins" << endl;
-                return 0;
-            }
-        }
-        cout << "Current hand: " << playerString << endl;
-        cout << "Hit or Stay? ";
-        cin >> command;
-    }
-    cout << "Player sum: " << playerSum << "\n" << endl;
 
-    cout << "House Hand: " << houseString << endl;
-    aceUsed = false;
-
-    while (houseSum < 17 || houseSum > 21) {
-        cout << "Current house hand: " << houseString << endl;
-        curCard = playingDeck.deal();
-        houseSum += getVal(curCard);
-        houseString += curCard.toString() + " ";
-        cout << "Next Card: " << curCard.toString() << endl;
-
-        if (houseSum > 21) {
-            if (houseString.find("A") != string::npos && !aceUsed) {
-                houseSum -= 10;
-                aceUsed = true;
-            } else {
-                cout << "House Bust! Player wins" << endl;
-                return 1;
-            }
-        }
-    }
-    if (houseSum > playerSum) {
-        cout << "House wins with " << houseSum << endl;
+    playerSum = playOneHand(playerString, playerSum, playingDeck);
+    if (playerSum == 0) {
         return 0;
-    } else if (houseSum < playerSum) {
-        cout << "Player wins with" << playerSum << endl;
-        return 1;
-    } else {
-        cout << "Push at " << houseSum << endl;
-        return 2;
     }
+    houseSum = playHouseHand(houseString, houseSum, playingDeck);
+
+    if (houseSum == 0) {
+        return 1;
+    }
+
+    return findWinner(playerSum, houseSum);
+
 }
 
 
-int getVal(Card input){
-    if(input.getValue() == "2"){
+int getVal(Card input) {
+    if (input.getValue() == "2") {
         return 2;
-    } else if(input.getValue() == "3"){
+    } else if (input.getValue() == "3") {
         return 3;
-    } else if(input.getValue() == "4"){
+    } else if (input.getValue() == "4") {
         return 4;
-    } else if(input.getValue() == "5"){
+    } else if (input.getValue() == "5") {
         return 5;
-    } else if(input.getValue() == "6"){
+    } else if (input.getValue() == "6") {
         return 6;
-    } else if(input.getValue() == "7"){
+    } else if (input.getValue() == "7") {
         return 7;
-    } else if(input.getValue() == "8"){
+    } else if (input.getValue() == "8") {
         return 8;
-    } else if(input.getValue() == "9"){
+    } else if (input.getValue() == "9") {
         return 9;
-    } else if(input.getValue() == "A"){
+    } else if (input.getValue() == "A") {
         return 11;
     } else {
         return 10;
     }
 }
-int testForBlackjack(int houseSum, int playerSum){
-    if(houseSum == 21 && playerSum == 21){
+
+int testForBlackjack(int houseSum, int playerSum) {
+    if (houseSum == 21 && playerSum == 21) {
         cout << "Double Blackjack!! Player and House Push" << endl;
-        return 2;
-    } else if(houseSum == 21){
+        return 1;
+    } else if (houseSum == 21) {
         cout << "House Blackjack, House Wins" << endl;
-        return 3;
-    } else if(playerSum == 21){
+        return 0;
+    } else if (playerSum == 21) {
         cout << "Player Blackjack!! Player Wins Bet and a Half!" << endl;
-        return 4;
-    } else{
+        return 3;
+    } else {
         return -1;
     }
-    
 }
 
 int runSplitRound(int houseSum, string houseString, int playerSum,
-                  string playerString, Deck &playingDeck){
+                  string playerString, Deck &playingDeck) {
     string playerString2 = "";
-    int playerSum2 = playerSum/2;
-    if(playerSum2 == 10) {
+    int playerSum2 = playerSum / 2;
+    if (playerSum2 == 10) {
         playerString2 = playerString.substr(4);
         playerString = playerString.substr(0, 4);
     } else {
@@ -174,54 +151,116 @@ int runSplitRound(int houseSum, string houseString, int playerSum,
     playerString += curCard.toString() + " ";
 
     cout << "Player Hand 1: " << playerString << endl << endl;
-    int blackjackTest = testForBlackjack(houseSum, playerSum);
-    if (blackjackTest != -1){
-        cout << "Player Hand 1 Blackjack!";
+    playerSum = playOneHand(playerString, playerSum, playingDeck);
 
+    cout << "Player Hand 2: " << playerString2 << endl << endl;
+    playerSum2 = playOneHand(playerString2, playerSum2, playingDeck);
+
+    if (playerSum == 0 && playerSum2 == 0) {
+        cout << "House Wins Both Hands" << endl;
+        return 5;
     }
 
+    houseSum = playHouseHand(houseString, houseSum, playingDeck);
 
+    int hand1result = findWinner(playerSum, houseSum);
+    int hand2result = findWinner(playerSum2, houseSum);
+    if (hand1result == 0 && hand2result == 0) {
+        cout << "House Wins Both Hands" << endl;
+        return 5;
+    }
+    if (hand1result == 1 && hand2result == 1) {
+        cout << "Player Wins Both Hands!" << endl;
+        return 4;
+    }
+    if (hand1result == 1 && hand2result == 0) {
+        cout << "Player Wins Hand 1, House Wins Hand 2" << endl;
+        return 1;
+    }
+    if (hand1result == 0 && hand2result == 1) {
+        cout << "House Wins Hand 1, Player Wins Hand 2" << endl;
+        return 1;
+    }
+    if (hand1result == 1) {
+        cout << "Player Wins Hand 1, Push for Hand 2" << endl;
+        return 2;
+    }
+    if (hand2result == 1) {
+        cout << "Push for Hand 1, Player Wins Hand 2" << endl;
+        return 2;
+    }
+    if (hand1result == 0) {
+        cout << "House Wins Hand 1, Push for Hand 2" << endl;
+        return 0;
+    }
+    if (hand2result == 0) {
+        cout << "Push for Hand 1, House Wins Hand 2" << endl;
+    }
+    cout << "Push for Both Hands" << endl;
+    return 2;
+}
+
+int playOneHand(string playerString, int playerSum, Deck &playingDeck) {
+    Card curCard;
     cout << "Hit or Stay? ";
     string command = "";
     cin >> command;
-    while(command == "hit" || command == "Hit"){
+    bool aceUsed = false;
+    while (command == "hit" || command == "Hit") {
         curCard = playingDeck.deal();
         playerSum += getVal(curCard);
         playerString += curCard.toString() + " ";
         cout << "Next Card: " << curCard.toString() << endl;
-        if(playerSum>21){
-            cout << "Player Bust! House wins" << endl;
-            return 0;
-        } else {
-            cout << "Current hand: " << playerString << endl;
-            cout << "Hit or Stay? ";
-            cin >> command;
-        }
-    }
-    if(command != "lose"){
-        while(houseSum < 17 || houseSum > 21){
-            cout << "Current house hand: " << houseString << endl;
-            curCard = playingDeck.deal();
-            houseSum += getVal(curCard);
-            houseString += curCard.toString() + " ";
-            cout << "Next Card: " << curCard.toString() << endl;
-        }
-        if(houseSum > 21){
-            cout << "House Bust! Player wins" << endl;
-            return 1;
-        } else {
-            if(houseSum>playerSum){
-                cout << "House wins" << endl;
-                return 0;
-            } else if(houseSum<playerSum){
-                cout << "Player wins!" << endl;
-                return 1;
+        if (playerSum > 21) {
+            if (playerString.find("A") != string::npos && !aceUsed) {
+                playerSum -= 10;
+                aceUsed = true;
             } else {
-                cout << "Push" << endl;
-                return 2;
+                cout << "Player Bust! House Wins" << endl;
+                return 0;
+            }
+        }
+        cout << "Current Hand: " << playerString << endl;
+        cout << "Hit or Stay? ";
+        cin >> command;
+    }
+    cout << "Player Sum: " << playerSum << "\n" << endl;
+    return playerSum;
+}
+
+int playHouseHand(string houseString, int houseSum, Deck &playingDeck) {
+    Card curCard;
+    cout << "House Hand: " << houseString << endl;
+    bool aceUsed = false;
+    while (houseSum < 17 || houseSum > 21) {
+        cout << "Current House Hand: " << houseString << endl;
+        curCard = playingDeck.deal();
+        houseSum += getVal(curCard);
+        houseString += curCard.toString() + " ";
+        cout << "Next Card: " << curCard.toString() << endl;
+
+        if (houseSum > 21) {
+            if (houseString.find("A") != string::npos && !aceUsed) {
+                houseSum -= 10;
+                aceUsed = true;
+            } else {
+                cout << "House Bust! Player wins" << endl;
+                return 0;
             }
         }
     }
-    return 0;
+    return houseSum;
 }
 
+int findWinner(int playerSum, int houseSum) {
+    if (houseSum > playerSum) {
+        cout << "House Wins With " << houseSum << endl;
+        return 0;
+    } else if (houseSum < playerSum) {
+        cout << "Player Wins With " << playerSum << endl;
+        return 1;
+    } else {
+        cout << "Push at " << houseSum << endl;
+        return 2;
+    }
+}
