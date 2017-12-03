@@ -2,6 +2,7 @@
 // Created by Davis Lee on 11/25/17.
 //
 
+
 #include "Deck.h"
 
 Deck::Deck() {
@@ -37,6 +38,9 @@ Deck::Deck() {
     shuffle();
 }
 
+int Deck::getPlace(){
+    return place;
+}
 void Deck::shuffle() {
     srand(time(NULL));
     int randNum = 0;

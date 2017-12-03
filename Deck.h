@@ -7,6 +7,7 @@
 
 #include "Card.h"
 
+
 class Deck {
 private:
     int place;
@@ -14,6 +15,7 @@ private:
 
 public:
     Deck();
+    int getPlace();
     void shuffle();
     Card deal();
 };

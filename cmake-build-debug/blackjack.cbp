@@ -82,6 +82,12 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/Users/davislee/CLionProjects/blackjack/Blackjack.cpp">
+			<Option target="blackjack"/>
+		</Unit>
+		<Unit filename="/Users/davislee/CLionProjects/blackjack/Blackjack.h">
+			<Option target="blackjack"/>
+		</Unit>
 		<Unit filename="/Users/davislee/CLionProjects/blackjack/Card.cpp">
 			<Option target="blackjack"/>
 		</Unit>

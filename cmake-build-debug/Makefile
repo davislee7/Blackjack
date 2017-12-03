@@ -123,6 +123,33 @@ blackjack/fast:
 	$(MAKE) -f CMakeFiles/blackjack.dir/build.make CMakeFiles/blackjack.dir/build
 .PHONY : blackjack/fast
 
+Blackjack.o: Blackjack.cpp.o
+
+.PHONY : Blackjack.o
+
+# target to build an object file
+Blackjack.cpp.o:
+	$(MAKE) -f CMakeFiles/blackjack.dir/build.make CMakeFiles/blackjack.dir/Blackjack.cpp.o
+.PHONY : Blackjack.cpp.o
+
+Blackjack.i: Blackjack.cpp.i
+
+.PHONY : Blackjack.i
+
+# target to preprocess a source file
+Blackjack.cpp.i:
+	$(MAKE) -f CMakeFiles/blackjack.dir/build.make CMakeFiles/blackjack.dir/Blackjack.cpp.i
+.PHONY : Blackjack.cpp.i
+
+Blackjack.s: Blackjack.cpp.s
+
+.PHONY : Blackjack.s
+
+# target to generate assembly for a file
+Blackjack.cpp.s:
+	$(MAKE) -f CMakeFiles/blackjack.dir/build.make CMakeFiles/blackjack.dir/Blackjack.cpp.s
+.PHONY : Blackjack.cpp.s
+
 Card.o: Card.cpp.o
 
 .PHONY : Card.o
@@ -213,6 +240,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... blackjack"
+	@echo "... Blackjack.o"
+	@echo "... Blackjack.i"
+	@echo "... Blackjack.s"
 	@echo "... Card.o"
 	@echo "... Card.i"
 	@echo "... Card.s"

@@ -6,6 +6,20 @@
 
 #IncludeRegexTransform: 
 
+/Users/davislee/CLionProjects/blackjack/Blackjack.cpp
+Blackjack.h
+/Users/davislee/CLionProjects/blackjack/Blackjack.h
+
+/Users/davislee/CLionProjects/blackjack/Blackjack.h
+Deck.h
+/Users/davislee/CLionProjects/blackjack/Deck.h
+iostream
+-
+vector
+-
+stdlib.h
+-
+
 /Users/davislee/CLionProjects/blackjack/Card.cpp
 Card.h
 /Users/davislee/CLionProjects/blackjack/Card.h
@@ -25,8 +39,8 @@ Card.h
 /Users/davislee/CLionProjects/blackjack/Card.h
 
 /Users/davislee/CLionProjects/blackjack/GameTime.cpp
-Deck.h
-/Users/davislee/CLionProjects/blackjack/Deck.h
+Blackjack.h
+/Users/davislee/CLionProjects/blackjack/Blackjack.h
 iostream
 -
 vector
