@@ -1,10 +1,12 @@
 //
 // Created by Davis Lee on 11/25/17.
-//
+// Deck object implementation
 
 
 #include "Deck.h"
 
+//Constructs deck with four suits C D H S
+//13 values 2-10, J, Q, K, A
 Deck::Deck() {
     place = 0;
     myDeck[0] = Card("A", "C");
@@ -38,9 +40,13 @@ Deck::Deck() {
     shuffle();
 }
 
+//Returns current place in deck
 int Deck::getPlace(){
     return place;
 }
+
+//Shuffle deck by swapping each card with another card at a random index
+//Random number generated with seed based on current time
 void Deck::shuffle() {
     srand(time(NULL));
     int randNum = 0;
@@ -50,6 +56,7 @@ void Deck::shuffle() {
     }
 }
 
+//Deals one card
 Card Deck::deal(){
     if(place>51){
         place = 0;
